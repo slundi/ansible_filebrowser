@@ -15,3 +15,8 @@ filebrowser_log: false
 filebrowser_noauth: false
 filebrowser_username: 
 filebrowser_password: 
+
+# default archive extension is .tar.gz, for windows it is .zip
+filebrowser_archive_ext: .tar.gz
+# the executable does not have extension on unix systems, for windows it is .exe
+filebrowser_executable_ext:
