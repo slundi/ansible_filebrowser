@@ -1,33 +1,60 @@
-Role Name
-=========
+# Filebrowser
 
-A brief description of the role goes here.
+Role ton install [Filebrowser](https://github.com/filebrowser/filebrowser).
 
-Requirements
-------------
+## Requirments
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None
 
-Role Variables
---------------
+Windows services are not supported
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Variables
 
-Dependencies
-------------
+### Mandatory variables
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+| Variable name | Description |
+|---------------|-------------|
+| filebrowser_owner | Linux user that'll run Filbrowser |
+| filebrowser_group | Linux group that run Filebrowser |
+| filebrowser_root | Path to your files that will be shown on Filebrowser |
 
-Example Playbook
-----------------
+### Optionnal variables
+
+| Variable name | Default value | Description |
+|---------------|:-------------:|-------------|
+| filebrowser_install_dir | `/opt/filebrowser` | Where Filebrowser is installed |
+| filebrowser_listen | `"0.0.0.0"` | Host address to listen, `0.0.0.0` for all adresses |
+| filebrowser_port | `8173` | Filebrowser host port |
+| filebrowser_baseurl | | Base URL to access Filebrowser |
+| filebrowser_cert | | TLS certificate path |
+| filebrowser_key | | TLS key |
+| filebrowser_config | | path to JSON or YAML file |
+| filebrowser_database | `/opt/filebrowser/data.db` | Bolt DB database path (will create subfolders) |
+| filebrowser_log | `false` | Log output |
+| filebrowser_noauth | `false` | Use the noauth auther when using quick setup |
+| filebrowser_username | | Username for the first user when using quick config |
+| filebrowser_password | | Hashed password for the first user when using quick config (default "admin") |
+
+## Dependencies
+
+None
+
+## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- hosts: servers
+  roles:
+      - role: slundi.filebrowser
+        vars:
+          filebrowser_owner: slundi
+          filebrowser_group: slundi
+          filebrowser_listen: "127.0.0.1"
+          filebrowser_port: 8173
+          filebrowser_root: /home/slundi
+```
 
-Author Information
-------------------
+## Author Information
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+I made this Ansible role because I wanted a lightweight file browser for my ARM NAS to do some operations on my files (if I move file between 2 NFS mounts using my desktop PC, there is a transfer between my PC and my NAS, that's why I want to avoid it wih Filebrowser).
