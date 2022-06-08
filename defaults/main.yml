@@ -1,0 +1,17 @@
+---
+filebrowser_owner: me
+filebrowser_group: me
+filebrowser_install_dir: /opt/filebrowser
+
+filebrowser_listen: "0.0.0.0"
+filebrowser_port: 8173
+filebrowser_baseurl: 
+filebrowser_root: #path to files
+filebrowser_cert: 
+filebrowser_key:
+filebrowser_config:  # path to JSON or YAML file
+filebrowser_database: /opt/filebrowser/data.db # bolt DB database
+filebrowser_log: false
+filebrowser_noauth: false
+filebrowser_username: 
+filebrowser_password: 

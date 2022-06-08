@@ -1,0 +1,108 @@
+---
+# tasks file for roles/filebrowser
+
+# - name: Delete existing archive
+#   file:
+#     state: absent
+#     path: /tmp/filebrowser-latest.tgz
+
+- name: 'Check mandatory variables are defined'
+  assert:
+    that:
+      - filebrowser_database is defined
+
+- name: Stop service filebrowser
+  block:
+    - name: Attempt to stop the service
+      ansible.builtin.service:
+        name: filebrowser
+        state: stopped
+    - name: Enable service
+      service:
+        name: filebrowser
+        enabled: no
+  rescue:
+    - name: Get the list of services
+      service_facts:
+    - name: Verify that filebrowser is not installed
+      assert:
+        that:
+          - "'filebrowser.service' not in services"
+
+- name: Creating filebrowser binary directory
+  file:
+    state: directory
+    path: "{{ filebrowser_install_dir }}"
+    owner: "{{ filebrowser_owner }}"
+    group: "{{ filebrowser_group }}"
+
+- name: Getting architecture
+  shell:
+    cmd: uname -m
+  register: arch
+- name: Correcting arch for AARCH64
+  set_fact:
+    arch: arm64
+  when: "'aarch64' in arch"
+- name: Correcting arch for AMD64
+  set_fact:
+    arch: amd64
+  when: "'64' in arch and arch != 'arm64'"
+- name: Correcting arch for x86
+  set_fact:
+    arch: 386
+  when: "'86' in arch"
+- name: Getting OS
+  shell:
+    cmd: uname | tr '[:upper:]' '[:lower:]'
+  register: os
+
+- name: Getting latest release information
+  uri:
+    url: https://api.github.com/repos/filebrowser/filebrowser/releases/latest
+    return_content: true
+    body_format: json
+  register: json_reponse
+
+- name: Get URL if arch is amd64 or x86_64
+  set_fact:
+    download_link: "https://github.com/filebrowser/filebrowser/releases/download/{{ json_reponse.json.tag_name }}/{{os}}-{{arch}}-filebrowser.tgz"
+
+#sources: "https://github.com/filebrowser/filebrowser/archive/refs/tag/{{ json_reponse.json.tag_name }}.tar.gz"
+
+# - name: Download latest release
+#   get_url:                                                           
+#     url: "{{ download_link }}"                   
+#     dest: /tmp/filebrowser-latest.tgz
+
+- name: Extracting archive
+  unarchive:
+    src: "{{ download_link }}"
+    dest: "{{ filebrowser_install_dir }}"
+    remote_src: true
+    owner: "{{ filebrowser_owner }}"
+    group: "{{ filebrowser_group }}"
+
+- name: Setting app as executable
+  ansible.builtin.file:
+    path: "{{ filebrowser_install_dir }}/filebrowser"
+    mode: u+x,g+x,o+x
+
+- name: Copying service file
+  ansible.builtin.template:
+    src: filebrowser.service.j2
+    dest: /lib/systemd/system/filebrowser.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - reload systemctl
+
+- name: Enable service
+  service:
+    name: filebrowser
+    enabled: yes
+- name: Start service
+  service:
+    name: filebrowser
+    state: started
