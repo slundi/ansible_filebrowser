@@ -9,7 +9,9 @@
 - name: 'Check mandatory variables are defined'
   assert:
     that:
-      - filebrowser_database is defined
+      - filebrowser_owner is defined
+      - filebrowser_group is defined
+      - filebrowser_root is defined
 
 - name: Stop service filebrowser
   block:
@@ -109,6 +111,13 @@
     path: "{{ filebrowser_install_dir }}/filebrowser"
     mode: u+x,g+x,o+x
 
+- name: Copying config file
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: "{{ filebrowser_config }}"
+    owner: "{{ filebrowser_owner }}"
+    group: "{{ filebrowser_group }}"
+    mode: "0644"
 - name: Copying service file
   ansible.builtin.template:
     src: filebrowser.service.j2

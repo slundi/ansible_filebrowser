@@ -33,7 +33,7 @@ Windows services are not supported
 | filebrowser_log | `false` | Log output |
 | filebrowser_noauth | `false` | Use the noauth auther when using quick setup |
 | filebrowser_username | | Username for the first user when using quick config |
-| filebrowser_password | | Hashed password for the first user when using quick config (default "admin") |
+| filebrowser_password | | BCrypt hashed password for the first user when using quick config (default "admin") |
 
 ## Dependencies
 
