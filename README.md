@@ -28,12 +28,12 @@ Windows services are not supported
 | filebrowser_baseurl | | Base URL to access Filebrowser |
 | filebrowser_cert | | TLS certificate path |
 | filebrowser_key | | TLS key |
-| filebrowser_config | | path to JSON or YAML file |
+| filebrowser_config | `/opt/filebrowser/config.yml` | path to JSON or YAML file |
 | filebrowser_database | `/opt/filebrowser/data.db` | Bolt DB database path (will create subfolders) |
 | filebrowser_log | `false` | Log output |
 | filebrowser_noauth | `false` | Use the noauth auther when using quick setup |
-| filebrowser_username | | Username for the first user when using quick config |
-| filebrowser_password | | BCrypt hashed password for the first user when using quick config (default "admin") |
+| filebrowser_username | `admin` | Username for the first user when using quick config |
+| filebrowser_password | `$2a$12$vTy9CAzZ.yZdtPd79hIB7.OAXO1ny20J9lVZN2dQx3B4WeHX8ta3u` | BCrypt hashed password for the first user when using quick config (default is "admin" so change the password) |
 
 ## Dependencies
 

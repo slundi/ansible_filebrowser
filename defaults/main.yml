@@ -1,8 +1,8 @@
 ---
 # Linux user that run filebrowser
-filebrowser_owner: me
+filebrowser_owner:
 # Linux group that run filebrowser
-filebrowser_group: me
+filebrowser_group:
 # Where binary files will be installed
 filebrowser_install_dir: /opt/filebrowser
 
